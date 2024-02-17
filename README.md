@@ -36,10 +36,3 @@ Welcome to the Flavor Fiesta Web Recipes Developer – your go-to platform for c
    - Immerse yourself in a visually stunning experience with high-quality images and engaging videos.
    - Learn, create, and share in a dynamic and inspiring environment.
 
-## Getting Started:
-
-To get started with the Flavor Fiesta Web Recipes Developer, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/AhmedEweesKorany/Flavor_Fiesta.git
