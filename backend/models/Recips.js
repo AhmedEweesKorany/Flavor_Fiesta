@@ -29,7 +29,7 @@ const Recipes = {
         cookingInstructions,
         rate],(err,data)=>{
             if(err) return callback(err,null)
-            return callback(null,err)
+            return callback(null,data)
         })
   },
 };
