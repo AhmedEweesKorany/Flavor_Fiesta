@@ -29,7 +29,7 @@ Welcome to the Flavor Fiesta Web Recipes Developer – your go-to platform for c
    - Share your creations, exchange tips, and explore collaborative culinary projects.
 
 7. **Meal Planning and Shopping Integration:**
-   - Simplify your life with integrated meal planning tools and seamless grocery shopping experiences.
+   - Simplify your life with integrated meal planning tools and seamless  grocery shopping experiences.
    - Plan your weekly meals and have ingredients delivered to your doorstep effortlessly.
 
 8. **Multimedia-rich Experience:**
