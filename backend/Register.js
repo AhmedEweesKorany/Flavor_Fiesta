@@ -1,0 +1,31 @@
+
+
+const register = async() => {
+    try {
+        const { name, email, password, address, phone, gender } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const checkQuery = 'SELECT * FROM users WHERE email = ?';
+        conn.execute(checkQuery, [email], (checkErr, checkResult) => {
+            if (checkErr) {
+                res.send("Error: " + checkErr.message);
+            } else {
+                if (checkResult.length > 0) {
+                    res.status(400).send("User already exists!");
+                } else {
+                    const insertQuery = "INSERT INTO `users`(`name`, `email`, `password`, `address`, `phone`,  `gender`) VALUES (?, ?, ?, ?, ?, ?)";
+                    conn.execute(insertQuery, [name, email, hashedPassword, address, phone, gender], (err, result) => {
+                        if (err) {
+                            res.send("Error: " + err.message);
+                        } else {
+                            res.send(result);
+                        }
+                    });
+                }
+            } 
+        });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+};
+
+module.exports = { register }

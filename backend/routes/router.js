@@ -2,6 +2,10 @@ const express = require("express")
 const userController = require("../controllers/userController")
 
 const recipesController = require("../controllers/recipesController")
+
+const register = require('../Register')
+const login = require('../Login')
+
 const router = express.Router()
 
 // user operations 
@@ -13,7 +17,12 @@ router.delete("/deleteuser/:id",userController.deleteUser)
 // Recipes operation
 
 router.get("/recipes",recipesController.getAllRecipes)
-
 router.post("/addrecipe",recipesController.addNewRecipe)
+
+// Login and Register Operations
+
+router.post('/register', register.register)
+router.post('/login', login.login)
+
 
 module.exports= router;
