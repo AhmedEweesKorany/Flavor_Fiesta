@@ -1,11 +1,14 @@
 const mysql = require("mysql2");
 
 const db_server = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "falvor_fiesta",
+  host: "sql.freedb.tech",
+  user: "freedb_flavourfiestaaaaa",
+  password: "C%CXNht4pX*ZB6?",
+  database: "freedb_flavour",
   waitForConnections: true,
+  connectionLimit: 10, 
+  queueLimit: 0, 
+  port: 3306,
 });
 
 
