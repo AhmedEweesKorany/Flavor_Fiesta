@@ -2,7 +2,7 @@
 
 const register = async() => {
     try {
-        const { name, email, password, address, phone, gender } = req.body;
+        const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const checkQuery = 'SELECT * FROM users WHERE email = ?';
         conn.execute(checkQuery, [email], (checkErr, checkResult) => {
@@ -12,8 +12,8 @@ const register = async() => {
                 if (checkResult.length > 0) {
                     res.status(400).send("User already exists!");
                 } else {
-                    const insertQuery = "INSERT INTO `users`(`name`, `email`, `password`, `address`, `phone`,  `gender`) VALUES (?, ?, ?, ?, ?, ?)";
-                    conn.execute(insertQuery, [name, email, hashedPassword, address, phone, gender], (err, result) => {
+                    const insertQuery = "INSERT INTO `users`(`name`, `email`, `password`) VALUES (?, ?, ?)";
+                    conn.execute(insertQuery, [name, email, hashedPassword], (err, result) => {
                         if (err) {
                             res.send("Error: " + err.message);
                         } else {
