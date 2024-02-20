@@ -3,10 +3,8 @@ import { Button, Input, Logo } from "../../components";
 import { IoMailOutline } from "react-icons/io5";
 import { BiLockAlt } from "react-icons/bi";
 import { AiOutlineUser } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
-import { useSignUpMutation } from "../../features/auth/authApiSlice";
-import { toast } from "react-toastify";
-import useTitle from "../../hooks/useTitle";
+import { Link } from "react-router-dom";
+
 
 const SignUp = () => {
   const [formDetails, setFormDetails] = useState({
@@ -14,33 +12,12 @@ const SignUp = () => {
     email: "",
     password: "",
   });
-  const [signUp, { isLoading }] = useSignUpMutation();
-  const navigate = useNavigate();
-  useTitle("Recipen - Sign Up");
 
   const handleChange = (e) => {
     setFormDetails({ ...formDetails, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    try {
-      const userData = await toast.promise(
-        signUp({ ...formDetails }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Sign up successfull",
-          error: "Sign up failed",
-        }
-      );
-      setFormDetails({ name: "", email: "", password: "" });
-      navigate("/auth/signin");
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
 
   return (
     <section className="flex w-full h-screen">
@@ -65,7 +42,6 @@ const SignUp = () => {
         {/* Sign up form */}
         <form
           className="flex flex-col gap-4"
-          onSubmit={handleSubmit}
         >
           <Input
             type={"text"}
@@ -108,7 +84,6 @@ const SignUp = () => {
             content={"Sign in"}
             type={"submit"}
             customCss={"mt-3 rounded-lg"}
-            loading={isLoading}
           />
         </form>
       </div>

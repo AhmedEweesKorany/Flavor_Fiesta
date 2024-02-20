@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, ComponentLoading } from "../../components";
 import { photo } from "../../assets";
 import { RxCross2 } from "react-icons/rx";
 import uploadImage from "../../common/uploadImage";
 import { LinearProgress } from "@mui/material";
 import { toast } from "react-toastify";
-import {
-  useGetRecipeQuery,
-  useUpdateRecipeMutation,
-} from "../../features/recipe/recipeApiSlice";
-import { useParams } from "react-router-dom";
 
 const EditRecipe = () => {
-  const { id } = useParams();
-
-  const { data, ...rest } = useGetRecipeQuery(id);
-  const [updateRecipe, { isLoading }] = useUpdateRecipeMutation();
 
   const [formDetails, setFormDetails] = useState({
-    title: data?.title || "",
-    image: data?.image || "",
-    description: data?.description || "",
-    calories: data?.calories || "",
-    cookingTime: data?.cookingTime || "",
-    ingredients: data?.ingredients || [],
-    instructions: data?.instructions || [],
+    title: "",
+    image: "",
+    description: "",
+    calories: "",
+    cookingTime: "",
+    ingredients: [],
+    instructions: [],
   });
 
   const [progress, setProgress] = useState(0);
@@ -36,20 +27,6 @@ const EditRecipe = () => {
     cookingTime: "",
     ingredient: "",
   });
-
-  useEffect(() => {
-    if (!rest?.isLoading) {
-      setFormDetails({
-        title: data?.title,
-        image: data?.image,
-        description: data?.description,
-        calories: data?.calories,
-        cookingTime: data?.cookingTime,
-        ingredients: data?.ingredients,
-        instructions: data?.instructions,
-      });
-    }
-  }, [rest?.isLoading]);
 
   const handleFocus = (e) => {
     setFocused({ ...focused, [e.target.id]: true });
@@ -83,30 +60,6 @@ const EditRecipe = () => {
     setInstruction("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formDetails.image) return toast.error("Upload recipe image");
-    if (!formDetails.ingredients.length)
-      return toast.error("Ingredients cannot be empty");
-    if (!formDetails.instructions.length)
-      return toast.error("Instructions cannot be empty");
-
-    try {
-      const recipe = await toast.promise(
-        updateRecipe({ ...formDetails, recipeId: id }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Recipe updated successfully",
-          error: "Unable to update recipe",
-        }
-      );
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
-
   return (
     <section className="box flex flex-col gap-6">
       <h2 className="font-bold text-xl">Add New Recipe</h2>
@@ -114,10 +67,7 @@ const EditRecipe = () => {
       {rest.isLoading ? (
         <ComponentLoading />
       ) : (
-        <form
-          className="flex flex-col-reverse md:flex-row gap-4 mt-10 justify-around"
-          onSubmit={handleSubmit}
-        >
+        <form className="flex flex-col-reverse md:flex-row gap-4 mt-10 justify-around">
           <div className="basis-1/2 flex flex-col gap-5">
             <div className="flex flex-col sm:flex-row justify-between">
               <label
@@ -134,7 +84,6 @@ const EditRecipe = () => {
                   id="title"
                   name="title"
                   onBlur={handleFocus}
-                  focused={focused.title.toString()}
                   pattern={"^.{3,}$"}
                   required
                   aria-required="true"
@@ -190,7 +139,6 @@ const EditRecipe = () => {
                   required
                   name="calories"
                   onBlur={handleFocus}
-                  focused={focused.calories.toString()}
                   aria-required="true"
                   aria-describedby="calories-error"
                   placeholder="Enter total calories"
@@ -319,10 +267,7 @@ const EditRecipe = () => {
                         <p className="text-sm text-gray-700">{ele}</p>
                       </div>
                       <div>
-                        <RxCross2
-                          className="cursor-pointer"
-                          size={20}
-                        />
+                        <RxCross2 className="cursor-pointer" size={20} />
                       </div>
                     </li>
                   ))}
@@ -333,7 +278,6 @@ const EditRecipe = () => {
               content={"Save changes"}
               type={"submit"}
               customCss={"rounded px-4 py-1 max-w-max"}
-              loading={isLoading}
             />
           </div>
           <hr className="block md:hidden mt-6" />

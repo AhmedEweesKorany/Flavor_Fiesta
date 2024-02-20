@@ -1,35 +1,8 @@
-import React, { useEffect } from "react";
-import { ComponentLoading, Table } from "../../components";
-import { setRecipes } from "../../features/recipe/recipeSlice";
-import { useDispatch } from "react-redux";
-import {
-  useGetRecipesQuery,
-  useDeleteRecipeMutation,
-} from "../../features/recipe/recipeApiSlice";
+import { Table } from "../../components";
+
 import { Avatar as MuiAvatar, Rating } from "@mui/material";
 
 const DashboardRecipes = () => {
-  const { data, isLoading } = useGetRecipesQuery();
-
-  const dispatch = useDispatch();
-  const updatedData = data?.map((item, index) => ({
-    ...item,
-    id: index + 1,
-  }));
-  const [deleteRecipe] = useDeleteRecipeMutation();
-
-  const handleDelete = (_id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
-      deleteRecipe(_id);
-    }
-  };
-
-  useEffect(() => {
-    if (!isLoading) {
-      dispatch(setRecipes(data));
-    }
-  }, [isLoading]);
-
   const cols = [
     { field: "id", headerName: "ID", width: 100 },
     {
@@ -91,7 +64,6 @@ const DashboardRecipes = () => {
           <div
             className="rounded shadow-md w-[40%] text-center cursor-pointer  bg-primaryLight
             hover:bg-primary text-light py-2"
-            onClick={() => handleDelete(_id)}
           >
             Delete
           </div>
@@ -103,14 +75,11 @@ const DashboardRecipes = () => {
   return (
     <section className="mx-auto px-6 flex justify-center items-center h-[100vh]">
       <div className="w-full h-[90%] flex justify-center items-center">
-        {isLoading ? (
-          <ComponentLoading />
-        ) : (
+    
           <Table
-            rows={updatedData}
             cols={cols}
           />
-        )}
+        
       </div>
     </section>
   );

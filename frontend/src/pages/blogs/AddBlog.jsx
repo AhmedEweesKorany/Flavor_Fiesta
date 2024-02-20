@@ -3,13 +3,9 @@ import { Button } from "../../components";
 import { photo } from "../../assets";
 import uploadImage from "../../common/uploadImage";
 import { LinearProgress } from "@mui/material";
-import { toast } from "react-toastify";
-import { useAddBlogMutation } from "../../features/blog/blogApiSlice";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import useTitle from "../../hooks/useTitle";
 
 const AddBlog = () => {
-  useTitle("Recipen - Add Blog");
 
   const [formDetails, setFormDetails] = useState({
     title: "",
@@ -20,7 +16,6 @@ const AddBlog = () => {
   const [focused, setFocused] = useState({
     title: "",
   });
-  const [addBlog, { isLoading }] = useAddBlogMutation();
 
   const handleFocus = (e) => {
     setFocused({ ...focused, [e.target.id]: true });
@@ -34,32 +29,6 @@ const AddBlog = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formDetails.image) return toast.error("Upload blog image");
-    if (!formDetails.description)
-      return toast.error("Blog content cannot be empty");
-
-    try {
-      const blog = await toast.promise(addBlog({ ...formDetails }).unwrap(), {
-        pending: "Please wait...",
-        success: "Blog added successfully",
-        error: "Unable to add blog",
-      });
-      setFormDetails({
-        title: "",
-        image: "",
-        description: "",
-      });
-      setFocused({
-        title: "",
-      });
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
 
   return (
     <section className="box flex flex-col gap-6">
@@ -67,7 +36,6 @@ const AddBlog = () => {
       <hr />
       <form
         className="flex flex-col-reverse md:flex-row gap-4 mt-10 justify-around"
-        onSubmit={handleSubmit}
       >
         <div className="basis-1/2 flex flex-col gap-5">
           <div className="flex flex-col sm:flex-row justify-between">
@@ -132,7 +100,6 @@ const AddBlog = () => {
             content={"Add blog"}
             type={"submit"}
             customCss={"rounded px-4 py-1 max-w-max"}
-            loading={isLoading}
           />
         </div>
         <hr className="block md:hidden mt-6" />

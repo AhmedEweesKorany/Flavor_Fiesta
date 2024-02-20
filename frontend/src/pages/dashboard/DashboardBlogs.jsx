@@ -1,34 +1,13 @@
-import React, { useEffect } from "react";
-import { ComponentLoading, Table } from "../../components";
-import { setBlogs } from "../../features/blog/blogSlice";
-import { useDispatch } from "react-redux";
-import {
-  useGetBlogsQuery,
-  useDeleteBlogMutation,
-} from "../../features/blog/blogApiSlice";
+import {  Table } from "../../components";
+
 import { Avatar as MuiAvatar } from "@mui/material";
 import dateFormat from "../../common/dateFormat";
 
 const DashboardBlogs = () => {
-  const { data, isLoading } = useGetBlogsQuery();
-  const dispatch = useDispatch();
-  const updatedData = data?.map((item, index) => ({
-    ...item,
-    id: index + 1,
-  }));
-  const [deleteBlog] = useDeleteBlogMutation();
+ 
 
-  const handleDelete = (_id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
-      deleteBlog(_id);
-    }
-  };
 
-  useEffect(() => {
-    if (!isLoading) {
-      dispatch(setBlogs(data));
-    }
-  }, [isLoading]);
+
 
   const cols = [
     { field: "id", headerName: "ID", width: 100 },
@@ -80,7 +59,6 @@ const DashboardBlogs = () => {
           <div
             className="rounded shadow-md w-[40%] text-center cursor-pointer  bg-primaryLight
             hover:bg-primary text-light py-2"
-            onClick={() => handleDelete(_id)}
           >
             Delete
           </div>
@@ -92,14 +70,11 @@ const DashboardBlogs = () => {
   return (
     <section className="mx-auto px-6 flex justify-center items-center h-[100vh]">
       <div className="w-full h-[90%] flex justify-center items-center">
-        {isLoading ? (
-          <ComponentLoading />
-        ) : (
+   
           <Table
-            rows={updatedData}
             cols={cols}
           />
-        )}
+        
       </div>
     </section>
   );

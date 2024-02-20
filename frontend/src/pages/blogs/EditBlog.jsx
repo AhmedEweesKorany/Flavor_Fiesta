@@ -4,37 +4,24 @@ import { photo } from "../../assets";
 import uploadImage from "../../common/uploadImage";
 import { LinearProgress } from "@mui/material";
 import { toast } from "react-toastify";
-import {
-  useGetBlogQuery,
-  useUpdateBlogMutation,
-} from "../../features/blog/blogApiSlice";
+
 import { useParams } from "react-router-dom";
 
 const EditBlog = () => {
   const { id } = useParams();
 
-  const { data, ...rest } = useGetBlogQuery(id);
-  const [updateBlog, { isLoading }] = useUpdateBlogMutation();
+ 
 
   const [formDetails, setFormDetails] = useState({
-    title: data?.title || "",
-    image: data?.image || "",
-    description: data?.description || "",
+    title:  "",
+    image:  "",
+    description:  "",
   });
   const [progress, setProgress] = useState(0);
   const [focused, setFocused] = useState({
     title: "",
   });
 
-  useEffect(() => {
-    if (!rest?.isLoading) {
-      setFormDetails({
-        title: data?.title,
-        image: data?.image,
-        description: data?.description,
-      });
-    }
-  }, [rest?.isLoading]);
 
   const handleFocus = (e) => {
     setFocused({ ...focused, [e.target.id]: true });
@@ -48,27 +35,7 @@ const EditBlog = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (!formDetails.image) return toast.error("Upload blog image");
-    if (!formDetails.description)
-      return toast.error("Blog content cannot be empty");
-
-    try {
-      const blog = await toast.promise(
-        updateBlog({ ...formDetails, blogId: id }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Blog updated successfully",
-          error: "Unable to update blog",
-        }
-      );
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
 
   return (
     <section className="box flex flex-col gap-6">
@@ -79,7 +46,6 @@ const EditBlog = () => {
       ) : (
         <form
           className="flex flex-col-reverse md:flex-row gap-4 mt-10 justify-around"
-          onSubmit={handleSubmit}
         >
           <div className="basis-1/2 flex flex-col gap-5">
             <div className="flex flex-col sm:flex-row justify-between">

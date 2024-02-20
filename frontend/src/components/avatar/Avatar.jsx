@@ -18,14 +18,9 @@ import {
   RestaurantMenu,
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { useLogoutMutation } from "../../features/auth/authApiSlice";
 
 const Avatar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const user = useAuth();
-
-  const [logout] = useLogoutMutation();
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -40,7 +35,6 @@ const Avatar = () => {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    logout();
     localStorage.setItem("persist", false);
     navigate("/auth/signin");
   };
@@ -57,9 +51,7 @@ const Avatar = () => {
           aria-expanded={open ? "true" : undefined}
         >
           <MuiAvatar
-            alt={user?.name}
-            src={user?.profilePicture}
-            sx={{ width: 34, height: 34 }}
+     
           />
         </IconButton>
       </Tooltip>
@@ -98,72 +90,49 @@ const Avatar = () => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem>
-          <Link
-            to={"/profile"}
-            className="flex items-center"
-          >
-            <MuiAvatar
-              alt={user?.name}
-              src={user?.profilePicture}
-              sx={{ width: 32, height: 32, mr: 2 }}
-            />{" "}
-            Profile
+          <Link to={"/profile"} className="flex items-center">
+            <MuiAvatar /> Profile
           </Link>
         </MenuItem>
-        {(user?.isAdmin || user?.isProUser) && (
-          <Box>
-            <Divider />
-            <MenuItem>
-              <Link
-                to="/recipe/add"
-                className="flex items-center"
-              >
-                <ListItemIcon>
-                  <RestaurantMenu fontSize="small" />
-                </ListItemIcon>
-                Add new recipe
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link
-                to="/blog/add"
-                className="flex items-center"
-              >
-                <ListItemIcon>
-                  <Article fontSize="small" />
-                </ListItemIcon>
-                Add new blog
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link
-                to="/recipe/my-recipes"
-                className="flex items-center"
-              >
-                <ListItemIcon>
-                  <Fastfood fontSize="small" />
-                </ListItemIcon>
-                My recipes
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link
-                to="/blog/my-blogs"
-                className="flex items-center"
-              >
-                <ListItemIcon>
-                  <Description fontSize="small" />
-                </ListItemIcon>
-                My blogs
-              </Link>
-            </MenuItem>
-          </Box>
-        )}
+
+        <Box>
+          <Divider />
+          <MenuItem>
+            <Link to="/recipe/add" className="flex items-center">
+              <ListItemIcon>
+                <RestaurantMenu fontSize="small" />
+              </ListItemIcon>
+              Add new recipe
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/blog/add" className="flex items-center">
+              <ListItemIcon>
+                <Article fontSize="small" />
+              </ListItemIcon>
+              Add new blog
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/recipe/my-recipes" className="flex items-center">
+              <ListItemIcon>
+                <Fastfood fontSize="small" />
+              </ListItemIcon>
+              My recipes
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/blog/my-blogs" className="flex items-center">
+              <ListItemIcon>
+                <Description fontSize="small" />
+              </ListItemIcon>
+              My blogs
+            </Link>
+          </MenuItem>
+        </Box>
+
         <MenuItem>
-          <Link
-            to="/recipe/saved"
-            className="flex items-center"
-          >
+          <Link to="/recipe/saved" className="flex items-center">
             <ListItemIcon>
               <Favorite fontSize="small" />
             </ListItemIcon>

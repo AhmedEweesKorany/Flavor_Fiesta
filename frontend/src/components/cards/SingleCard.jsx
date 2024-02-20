@@ -1,23 +1,14 @@
 import React from "react";
 import { BsArrowUpRight } from "react-icons/bs";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Rating } from "@mui/material";
 import dateFormat from "../../common/dateFormat";
-import { toast } from "react-toastify";
-import { useToggleFavoriteMutation } from "../../features/recipe/recipeApiSlice";
-import { setCredentials } from "../../features/auth/authSlice";
-import { useDispatch } from "react-redux";
 import ShareButton from "../shareButton/ShareButton";
-import useAuth from "../../hooks/useAuth";
 
 const SingleCard = ({ singleData, type }) => {
-  const user = useAuth();
 
-  const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-  const [toggleFavorite] = useToggleFavoriteMutation();
 
   const formattedDate = dateFormat(singleData?.createdAt);
   const sumOfRatings = singleData?.ratings.reduce(
@@ -27,26 +18,7 @@ const SingleCard = ({ singleData, type }) => {
   const averageRating =
     sumOfRatings === 0 ? 0 : sumOfRatings / singleData?.ratings.length;
 
-  const handleToggleFavorite = async () => {
-    try {
-      if (!user) {
-        toast.error("You must sign in first");
-        return navigate("/auth/signin");
-      }
-      const userData = await toast.promise(
-        toggleFavorite({ recipeId: singleData._id }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Favorites updated",
-          error: "Unable to update favorites",
-        }
-      );
-      dispatch(setCredentials({ ...userData }));
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
+
 
   return (
     <div className="flex flex-col gap-1 justify-between shadow hover:shadow-lg rounded">
@@ -60,12 +32,10 @@ const SingleCard = ({ singleData, type }) => {
               {user?.favorites?.some((ele) => ele === singleData._id) ? (
                 <AiFillHeart
                   className="text-2xl text-red-500 cursor-pointer"
-                  onClick={handleToggleFavorite}
                 />
               ) : (
                 <AiOutlineHeart
                   className="text-2xl text-red-500 cursor-pointer"
-                  onClick={handleToggleFavorite}
                 />
               )}
               <ShareButton

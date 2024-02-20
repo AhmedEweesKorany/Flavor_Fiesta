@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Button } from "../../components";
 import { photo } from "../../assets";
 import { RxCross2 } from "react-icons/rx";
 import uploadImage from "../../common/uploadImage";
 import { LinearProgress } from "@mui/material";
 import { toast } from "react-toastify";
-import { useAddRecipeMutation } from "../../features/recipe/recipeApiSlice";
-import useTitle from "../../hooks/useTitle";
 
 const AddRecipe = () => {
-  useTitle("Recipen - Add Recipe");
 
   const [formDetails, setFormDetails] = useState({
     title: "",
@@ -29,7 +26,6 @@ const AddRecipe = () => {
     cookingTime: "",
     ingredient: "",
   });
-  const [addRecipe, { isLoading }] = useAddRecipeMutation();
 
   const handleFocus = (e) => {
     setFocused({ ...focused, [e.target.id]: true });
@@ -63,52 +59,12 @@ const AddRecipe = () => {
     setInstruction("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formDetails.image) return toast.error("Upload recipe image");
-    if (!formDetails.ingredients.length)
-      return toast.error("Ingredients cannot be empty");
-    if (!formDetails.instructions.length)
-      return toast.error("Instructions cannot be empty");
-
-    try {
-      const recipe = await toast.promise(
-        addRecipe({ ...formDetails }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Recipe added successfully",
-          error: "Unable to add recipe",
-        }
-      );
-      setFormDetails({
-        title: "",
-        image: "",
-        description: "",
-        calories: "",
-        cookingTime: "",
-        ingredients: [],
-        instructions: [],
-      });
-      setFocused({
-        title: "",
-        calories: "",
-        cookingTime: "",
-        ingredient: "",
-      });
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
-
   return (
     <section className="box flex flex-col gap-6">
       <h2 className="font-bold text-xl">Add New Recipe</h2>
       <hr />
       <form
         className="flex flex-col-reverse md:flex-row gap-4 mt-10 justify-around"
-        onSubmit={handleSubmit}
       >
         <div className="basis-1/2 flex flex-col gap-5">
           <div className="flex flex-col sm:flex-row justify-between">
@@ -325,7 +281,6 @@ const AddRecipe = () => {
             content={"Add recipe"}
             type={"submit"}
             customCss={"rounded px-4 py-1 max-w-max"}
-            loading={isLoading}
           />
         </div>
         <hr className="block md:hidden mt-6" />

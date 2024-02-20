@@ -2,8 +2,6 @@ import React from "react";
 import { Button } from "..";
 import { BsCheckLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useSubscribeUserMutation } from "../../features/user/userApiSlice";
 
 const SubscribeCard = ({
   title,
@@ -15,17 +13,8 @@ const SubscribeCard = ({
   btnText,
   link,
 }) => {
-  const [subscribeUser] = useSubscribeUserMutation();
 
-  const handleClick = async () => {
-    try {
-      const { url } = await subscribeUser().unwrap();
-      window.location.href = url;
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
+
 
   return (
     <div className="flex flex-col items-center md:items-start gap-1 shadow bg-white rounded-lg p-8 hover:shadow-lg w-full">
@@ -48,7 +37,6 @@ const SubscribeCard = ({
       ) : (
         <Button
           content={btnText}
-          handleClick={handleClick}
           customCss={"rounded text-sm w-full"}
         />
       )}

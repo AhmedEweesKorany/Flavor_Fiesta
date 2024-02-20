@@ -13,138 +13,32 @@ import { LuChefHat } from "react-icons/lu";
 import { BsStopwatch } from "react-icons/bs";
 import { LiaWeightSolid } from "react-icons/lia";
 import { AiOutlineHeart, AiFillHeart, AiOutlineUser } from "react-icons/ai";
-import {
-  useGetRecipeQuery,
-  useRateRecipeMutation,
-  useCommentRecipeMutation,
-  useDeleteCommentRecipeMutation,
-  useToggleFavoriteMutation,
-  useDeleteRecipeMutation,
-} from "../../features/recipe/recipeApiSlice";
-import { Link, useNavigate, useParams } from "react-router-dom";
+
+import { Link, useParams } from "react-router-dom";
 import { Rating, IconButton, Menu, MenuItem } from "@mui/material";
-import { toast } from "react-toastify";
-import { setCredentials } from "../../features/auth/authSlice";
-import { useDispatch } from "react-redux";
+
 import { MoreVert } from "@mui/icons-material";
-import useAuth from "../../hooks/useAuth";
-import useTitle from "../../hooks/useTitle";
 
 const SingleRecipe = () => {
-  useTitle("Recipen - Recipe");
 
-  const user = useAuth();
-  const [rating, setRating] = useState(0);
   const { id } = useParams();
-  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const navigate = useNavigate();
 
-  const { data, ...rest } = useGetRecipeQuery(id);
-  const [rateRecipe] = useRateRecipeMutation();
-  const [commentRecipe, { isLoading }] = useCommentRecipeMutation();
-  const [deleteComment] = useDeleteCommentRecipeMutation();
-  const [toggleFavorite] = useToggleFavoriteMutation();
-  const [deleteRecipe] = useDeleteRecipeMutation();
 
   const [formDetails, setFormDetails] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
+    name: "",
+    email:  "",
     message: "",
   });
 
-  const sumOfRatings = data?.ratings.reduce(
-    (sum, item) => sum + item.rating,
-    0
-  );
-  const averageRating =
-    sumOfRatings === 0 ? 0 : sumOfRatings / data?.ratings.length;
+ 
 
   const handleChange = (e) => {
     setFormDetails({ ...formDetails, [e.target.id]: e.target.value });
   };
 
-  const handleRating = async (event, newValue) => {
-    try {
-      if (!user) {
-        toast.error("You must sign in first");
-        return navigate("/auth/signin");
-      }
-      setRating(newValue);
-      await toast.promise(
-        rateRecipe({ rating: newValue, recipeId: id }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Rating added successfully",
-          error: "You have already rating this recipe",
-        }
-      );
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) {
-      toast.error("You must sign in first");
-      return navigate("/auth/signin");
-    }
-    try {
-      await toast.promise(
-        commentRecipe({ recipeId: id, comment: formDetails.message }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Comment added",
-          error: "Could not add comment",
-        }
-      );
-      setFormDetails({ ...formDetails, message: "" });
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
-
-  const handleDeleteComment = async (_id) => {
-    try {
-      await toast.promise(
-        deleteComment({ recipeId: id, commentId: _id }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Comment deleted",
-          error: "Could not delete comment",
-        }
-      );
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
-
-  const handleToggleFavorite = async () => {
-    try {
-      if (!user) {
-        toast.error("You must sign in first");
-        return navigate("/auth/signin");
-      }
-
-      const userData = await toast.promise(
-        toggleFavorite({ recipeId: id }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Favorites updated",
-          error: "Unable to update favorites",
-        }
-      );
-      dispatch(setCredentials({ ...userData }));
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -154,13 +48,7 @@ const SingleRecipe = () => {
     setAnchorEl(null);
   };
 
-  const handleMenuDelete = () => {
-    if (window.confirm("Are you sure you want to delete?")) {
-      deleteRecipe(data?._id);
-      navigate("/recipe");
-    }
-    setAnchorEl(null);
-  };
+
 
   return (
     <>
@@ -172,16 +60,15 @@ const SingleRecipe = () => {
             {/* Recipe image */}
             <div className="basis-1/3">
               <img
-                src={data?.image}
-                alt={data?.title}
+              
                 className="rounded w-full"
               />
             </div>
             {/* Recipe details */}
             <div className="basis-2/3 flex flex-col gap-2">
               <div className="flex justify-between">
-                <h2 className="font-bold text-xl md:text-3xl">{data?.title}</h2>
-                {data?.author?._id === user?.userId && (
+                <h2 className="font-bold text-xl md:text-3xl">title</h2>
+                {data?.author?._id === true&& (
                   <>
                     <IconButton
                       aria-label="more"
@@ -206,7 +93,6 @@ const SingleRecipe = () => {
                       <MenuItem>
                         <Link to={`/recipe/edit/${id}`}>Edit</Link>
                       </MenuItem>
-                      <MenuItem onClick={handleMenuDelete}>Delete</MenuItem>
                     </Menu>
                   </>
                 )}
@@ -220,12 +106,11 @@ const SingleRecipe = () => {
                   {user?.favorites?.some((ele) => ele === id) ? (
                     <AiFillHeart
                       className="text-2xl text-red-500 cursor-pointer"
-                      onClick={handleToggleFavorite}
                     />
                   ) : (
                     <AiOutlineHeart
                       className="text-2xl text-red-500 cursor-pointer"
-                      onClick={handleToggleFavorite}
+                      
                     />
                   )}
                   <ShareButton
@@ -235,7 +120,6 @@ const SingleRecipe = () => {
               </div>
               {/* Recipe rating */}
               <Rating
-                value={averageRating}
                 size={"medium"}
                 readOnly
               />
@@ -290,8 +174,6 @@ const SingleRecipe = () => {
                 <Rating
                   size={"large"}
                   precision={0.25}
-                  value={rating}
-                  onChange={handleRating}
                 />
               </div>
               <hr />
@@ -302,7 +184,6 @@ const SingleRecipe = () => {
             <h3 className="font-bold text-2xl">Leave a Reply</h3>
             <form
               className="flex flex-col gap-4"
-              onSubmit={handleSubmit}
             >
               <Input
                 type={"text"}
@@ -345,7 +226,6 @@ const SingleRecipe = () => {
                 icon={<FaRegPaperPlane />}
                 type={"submit"}
                 customCss={"rounded-lg gap-3 max-w-max"}
-                loading={isLoading}
               />
             </form>
           </div>
@@ -360,7 +240,6 @@ const SingleRecipe = () => {
                     key={comment?._id}
                     comment={comment}
                     userId={user?.userId}
-                    handleDeleteComment={handleDeleteComment}
                   />
                 ))}
               </div>

@@ -10,38 +10,25 @@ import { IoMailOutline } from "react-icons/io5";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { BsFillPersonFill, BsCalendarCheck } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
-import {
-  useGetBlogQuery,
-  useCommentBlogMutation,
-  useDeleteCommentBlogMutation,
-  useDeleteBlogMutation,
-} from "../../features/blog/blogApiSlice";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
 import dateFormat from "../../common/dateFormat";
-import { toast } from "react-toastify";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
-import useAuth from "../../hooks/useAuth";
-import useTitle from "../../hooks/useTitle";
 
 const SingleBlog = () => {
-  useTitle("Recipen - Blog");
 
-  const user = useAuth();
   const { id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
-  const { data, ...rest } = useGetBlogQuery(id);
-  const [commentBlog, { isLoading }] = useCommentBlogMutation();
-  const [deleteComment] = useDeleteCommentBlogMutation();
-  const [deleteBlog] = useDeleteBlogMutation();
+ 
 
   const [formDetails, setFormDetails] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
+    name:  "",
+    email:  "",
     message: "",
   });
 
@@ -49,43 +36,9 @@ const SingleBlog = () => {
     setFormDetails({ ...formDetails, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) {
-      toast.error("You must sign in first");
-      return navigate("/auth/signin");
-    }
-    try {
-      await toast.promise(
-        commentBlog({ blogId: id, comment: formDetails.message }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Comment added",
-          error: "Could not add comment",
-        }
-      );
-      setFormDetails({ ...formDetails, message: "" });
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
 
-  const handleDeleteComment = async (_id) => {
-    try {
-      await toast.promise(
-        deleteComment({ blogId: id, commentId: _id }).unwrap(),
-        {
-          pending: "Please wait...",
-          success: "Comment deleted",
-          error: "Could not delete comment",
-        }
-      );
-    } catch (error) {
-      toast.error(error.data);
-      console.error(error);
-    }
-  };
+
+  
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -97,7 +50,6 @@ const SingleBlog = () => {
 
   const handleMenuDelete = () => {
     if (window.confirm("Are you sure you want to delete?")) {
-      deleteBlog(data?._id);
       navigate("/blog");
     }
     setAnchorEl(null);
@@ -115,7 +67,6 @@ const SingleBlog = () => {
               <h2 className="font-bold text-2xl md:text-4xl text-center mb-6">
                 {data?.title}
               </h2>
-              {data?.author?._id === user?.userId && (
                 <>
                   <IconButton
                     aria-label="more"
@@ -143,7 +94,7 @@ const SingleBlog = () => {
                     <MenuItem onClick={handleMenuDelete}>Delete</MenuItem>
                   </Menu>
                 </>
-              )}
+              
             </div>
             {/* Blog image */}
             <img
@@ -172,7 +123,6 @@ const SingleBlog = () => {
             <h3 className="font-bold text-2xl">Leave a Reply</h3>
             <form
               className="flex flex-col gap-4"
-              onSubmit={handleSubmit}
             >
               <Input
                 type={"text"}
@@ -215,7 +165,6 @@ const SingleBlog = () => {
                 icon={<FaRegPaperPlane />}
                 type={"submit"}
                 customCss={"rounded-lg gap-3 max-w-max"}
-                loading={isLoading}
               />
             </form>
           </div>
@@ -229,8 +178,6 @@ const SingleBlog = () => {
                   <Comment
                     key={comment?._id}
                     comment={comment}
-                    userId={user?.userId}
-                    handleDeleteComment={handleDeleteComment}
                   />
                 ))}
               </div>

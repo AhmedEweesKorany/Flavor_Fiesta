@@ -26,15 +26,10 @@ import {
 } from "./pages";
 import { ScrollToTop, PageLoading } from "./components";
 import { RootLayout, DashboardLayout } from "./layouts";
-import RequireAuth from "./features/auth/RequireAuth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ROLES from "./common/roles";
-import PersistLogin from "./features/auth/PersistLogin";
-import useTitle from "./hooks/useTitle";
 
 function App() {
-  useTitle("Recipen - Home");
 
   return (
     <Router>
@@ -58,9 +53,9 @@ function App() {
             />
           </Route>
 
-          <Route element={<PersistLogin />}>
+          <Route >
             {/* Dashboard */}
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route >
               <Route
                 path="/dashboard"
                 element={<DashboardLayout />}
@@ -103,9 +98,7 @@ function App() {
                 />
 
                 <Route
-                  element={
-                    <RequireAuth allowedRoles={[ROLES.ProUser, ROLES.Admin]} />
-                  }
+                 
                 >
                   <Route
                     path="add"
@@ -135,9 +128,7 @@ function App() {
                   element={<SingleBlog />}
                 />
                 <Route
-                  element={
-                    <RequireAuth allowedRoles={[ROLES.ProUser, ROLES.Admin]} />
-                  }
+                
                 >
                   <Route
                     path="add"
@@ -154,11 +145,7 @@ function App() {
                 </Route>
               </Route>
               <Route
-                element={
-                  <RequireAuth
-                    allowedRoles={[ROLES.BasicUser, ROLES.ProUser, ROLES.Admin]}
-                  />
-                }
+              
               >
                 <Route
                   path="profile"

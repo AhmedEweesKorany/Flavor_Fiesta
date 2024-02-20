@@ -9,17 +9,13 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { motion } from "framer-motion";
-import useAuth from "../../hooks/useAuth";
-import useTitle from "../../hooks/useTitle";
 
 const Contact = () => {
-  const user = useAuth();
-  useTitle("Recipen - Contact Us");
 
   const [formDetails, setFormDetails] = useState({
     firstName: "",
     lastName: "",
-    email: user?.email || "",
+    email:  "",
     message: "",
   });
   const [focused, setFocused] = useState(false);
