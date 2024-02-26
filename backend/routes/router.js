@@ -19,8 +19,7 @@ router.delete("/deleteuser/:id",userController.deleteUser)
 router.get("/recipes",recipesController.getAllRecipes)
 router.post("/addrecipe",recipesController.addNewRecipe)
 
-// Login and Register Operations
-
+// Login and Register Operations (errorr ely mbwz eldenyaaaaaaaaaaaaaaaaaa)
 router.post('/register', register.register)
 router.post('/login', login.login)
 
