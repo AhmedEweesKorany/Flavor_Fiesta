@@ -17,11 +17,13 @@ router.delete("/deleteuser/:id",userController.deleteUser)
 // Recipes operation
 
 router.get("/recipes",recipesController.getAllRecipes)
+router.get("/recipe/:id",recipesController.getOneRecipe)
 router.post("/addrecipe",recipesController.addNewRecipe)
 
+
 // Login and Register Operations (errorr ely mbwz eldenyaaaaaaaaaaaaaaaaaa)
-router.post('/register', register.register)
-router.post('/login', login.login)
+// router.post('/register', register.register)
+// router.post('/login', login.login)
 
 
 module.exports= router;

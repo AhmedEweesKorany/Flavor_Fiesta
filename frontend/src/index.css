@@ -111,3 +111,10 @@ input:invalid[focused="true"] ~ span {
     transform: translateX(-20%) !important;
   }
 }
+
+
+
+/* Change active pagination color */
+.swiper-pagination-bullet-active {
+  @apply bg-primaryLight; /* Change to your desired color */
+}

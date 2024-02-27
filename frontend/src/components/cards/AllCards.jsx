@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { NoData, SingleCard } from "..";
 
-const index = ({ mainTitle, tagline, type, data }) => {
+const index = ({ mainTitle, tagline, type }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+  const [data, setData] = useState([]);
+
+  async function getData() {
+    fetch("http://localhost:3010/recipes")
+      .then((data) => data.json())
+      .then((res) => {
+        setData(res.data);
+      });
+  }
 
   useEffect(() => {
-    const newFilteredData = data?.filter((element) =>
-      element.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredData(newFilteredData);
-  }, [searchTerm, data]);
-
+    getData();
+  }, []);
   return (
     <section className="box flex flex-col items-center">
       <div className="flex flex-col items-center gap-5 w-full mb-10">
@@ -37,9 +41,9 @@ const index = ({ mainTitle, tagline, type, data }) => {
         {/* Sub heading */}
         <h3 className="font-bold text-xl w-full">Recent {type}s</h3>
         {/* Cards container */}
-        {filteredData?.length ? (
+        {data.length ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-            {filteredData?.map((singleData) => (
+            {data?.map((singleData) => (
               <SingleCard
                 key={singleData._id}
                 singleData={singleData}

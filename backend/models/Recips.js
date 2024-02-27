@@ -20,17 +20,33 @@ const Recipes = {
       rate,
     } = userdata;
 
-    db.query("INSERT INTO `recipes`(`recipes_title`, `recipes_description`, `recipes_image`, `recipes_cookingtime`, `recipes_calories`, `recipes_ingredients`, `recipes_cookingInstructions`, `recipes_rate`)  VALUES (?, ?, ?, ?, ?, ?, ?,?)",[      title,
+    db.query(
+      "INSERT INTO `recipes`(`recipes_title`, `recipes_description`, `recipes_image`, `recipes_cookingtime`, `recipes_calories`, `recipes_ingredients`, `recipes_cookingInstructions`, `recipes_rate`)  VALUES (?, ?, ?, ?, ?, ?, ?,?)",
+      [
+        title,
         description,
         image,
         cookingTime,
         calories,
         ingredients,
         cookingInstructions,
-        rate],(err,data)=>{
-            if(err) return callback(err,null)
-            return callback(null,data)
-        })
+        rate,
+      ],
+      (err, data) => {
+        if (err) return callback(err, null);
+        return callback(null, data);
+      }
+    );
+  },
+  getOneRecipe: (id, callback) => {
+    db.query(
+      "SELECT * FROM `recipes` WHERE recipes_id = ?",
+      [id],
+      (err, data) => {
+        if (err) return callback(err, null);
+        return callback(null, data);
+      }
+    );
   },
 };
 

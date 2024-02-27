@@ -75,7 +75,7 @@ const Footer = () => {
       {/* Footer bottom */}
       <div className="box flex justify-center sm:justify-between flex-col sm:flex-row w-full gap-4">
         <p className="text-sm text-center">
-          &copy; {new Date().getFullYear()} Recipen. All rights reserved
+          &copy; {new Date().getFullYear()} Flavor Fiesta. All rights reserved
         </p>
         {/* Footer social links */}
         <ul className="flex justify-center gap-6 text-xl">
@@ -84,29 +84,19 @@ const Footer = () => {
             whileHover={{ y: -4 }}
           >
             <a
-              href="https://github.com/Avinash905"
+              href="https://github.com/ِِِAhmedEweesKorany"
               aria-label="Follow me on github"
             >
               <AiFillGithub />
             </a>
           </motion.li>
-          <motion.li
-            className="border border-primary p-1 rounded-full hover:text-blue-400"
-            whileHover={{ y: -4 }}
-          >
-            <a
-              href="https://twitter.com/avinashdunna"
-              aria-label="Follow me on twitter"
-            >
-              <AiFillTwitterCircle />
-            </a>
-          </motion.li>
+        
           <motion.li
             className="border border-primary p-1 rounded-full hover:text-blue-600"
             whileHover={{ y: -4 }}
           >
             <a
-              href="https://www.linkedin.com/in/dunna-avinash"
+              href="https://www.linkedin.com/in/ahmed-ewees-528657288/"
               aria-label="Follow me on linkedin"
             >
               <AiFillLinkedin />

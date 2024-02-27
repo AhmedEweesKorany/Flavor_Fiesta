@@ -11,7 +11,7 @@ const Hero = () => {
           Feast. Share. Connect.
         </span>
         <h2 className="font-bold text-3xl md:text-5xl text-center md:text-start">
-          Welcome to <span className="text-primary">Recipen</span>
+          Welcome to <span className="text-primary">Flavor Fiesta</span>
         </h2>
         <p className="text-gray-600 text-center md:text-start">
           Where food lovers unite to discover mouthwatering recipes, delightful
