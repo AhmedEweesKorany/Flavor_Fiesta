@@ -2,19 +2,74 @@ import React, { useState } from "react";
 import { Button, Input, Logo } from "../../components";
 import { IoMailOutline } from "react-icons/io5";
 import { BiLockAlt } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import axios from "axios"
+import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
+
 const SignIn = () => {
+  const navigate = useNavigate(); // Move useNavigate outside of handleSubmit
+
   const [formDetails, setFormDetails] = useState({
     email: "",
     password: "",
   });
 
-
   const handleChange = (e) => {
     setFormDetails({ ...formDetails, [e.target.id]: e.target.value });
   };
 
+  const validateForm = () => {
+    if (!formDetails.email) {
+      toast.error("Enter a valid email address");
+      return false;
+    }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formDetails.email)) {
+      toast.error("Enter a valid email address");
+      return false;
+    }
+
+    if (!formDetails.password) {
+      toast.error("Enter a valid password");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    axios
+      .post('http://localhost:3010/login', formDetails)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          Swal.fire({
+            title: 'Success',
+            text: res.data.message,
+            icon: 'success',
+          });
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: err.message,
+        });
+      });
+
+    setFormDetails({ email: '', password: ''});
+  };
 
   return (
     <section className="flex w-full h-screen">
@@ -39,6 +94,7 @@ const SignIn = () => {
         {/* Sign in form */}
         <form
           className="flex flex-col gap-4"
+          onSubmit={handleSubmit}
         >
           <Input
             type={"email"}
@@ -62,6 +118,10 @@ const SignIn = () => {
             content={"Sign in"}
             type={"submit"}
             customCss={"mt-5 rounded-lg"}
+          />
+          <Toaster
+            position="bottom-right"
+            reverseOrder={false}
           />
         </form>
       </div>

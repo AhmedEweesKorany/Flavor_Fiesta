@@ -21,10 +21,7 @@ const Input = ({
 
   return (
     <div className="flex flex-col relative">
-      <label
-        htmlFor={id}
-        className="text-sm font-semibold mb-3"
-      >
+      <label htmlFor={id} className="text-sm font-semibold mb-3">
         {label}
       </label>
       <span className="absolute top-[39px] left-3 bg-light p-1 rounded text-primary">
@@ -38,9 +35,7 @@ const Input = ({
         name={id}
         onBlur={handleFocus}
         focused={focused.toString()}
-        required
         aria-required="true"
-        aria-describedby={`${id}-error`}
         placeholder={placeholder}
         pattern={pattern}
         className="py-1.5 px-11 border bg-gray-100 rounded-lg focus:outline outline-primary"
@@ -61,12 +56,13 @@ const Input = ({
           )}
         </>
       )}
-      <span
-        id={`${id}-error`}
-        className="hidden text-red-500 pl-2 text-sm mt-1"
-      >
-        {errorMessage}
-      </span>
+      {(errorMessage || focused) && (
+        <span
+          className="text-red-500 pl-2 text-sm mt-1"
+        >
+          {errorMessage}
+        </span>
+      )}
     </div>
   );
 };

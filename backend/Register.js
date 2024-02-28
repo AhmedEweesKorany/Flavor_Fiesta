@@ -1,6 +1,7 @@
+const conn = require('./config/db')
+const bcrypt = require("bcrypt")
 
-
-const register = async() => {
+const register = async(req, res) => {
     try {
         const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -12,12 +13,12 @@ const register = async() => {
                 if (checkResult.length > 0) {
                     res.status(400).send("User already exists!");
                 } else {
-                    const insertQuery = "INSERT INTO `users`(`name`, `email`, `password`) VALUES (?, ?, ?)";
+                    const insertQuery = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
                     conn.execute(insertQuery, [name, email, hashedPassword], (err, result) => {
                         if (err) {
                             res.send("Error: " + err.message);
                         } else {
-                            res.send(result);
+                            res.send({message: "account Created Successfully",result});
                         }
                     });
                 }
@@ -28,4 +29,4 @@ const register = async() => {
     }
 };
 
-module.exports = { register }
+module.exports =  register

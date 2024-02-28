@@ -1,4 +1,8 @@
-const Login = async() =>{
+const conn = require('./config/db')
+const bcrypt = require("bcrypt")
+
+
+const Login = async(req, res) =>{
         try {
           const { email, password } = req.body;
       
@@ -24,3 +28,5 @@ const Login = async() =>{
           res.send("Error")
         }
 }
+
+module.exports = Login

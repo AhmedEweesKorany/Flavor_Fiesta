@@ -3,10 +3,14 @@ import { Button, Input, Logo } from "../../components";
 import { IoMailOutline } from "react-icons/io5";
 import { BiLockAlt } from "react-icons/bi";
 import { AiOutlineUser } from "react-icons/ai";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const SignUp = () => {
+  const navigate = useNavigate(); // Move useNavigate outside of handleSubmit
+
   const [formDetails, setFormDetails] = useState({
     name: "",
     email: "",
@@ -14,10 +18,61 @@ const SignUp = () => {
   });
 
   const handleChange = (e) => {
-    setFormDetails({ ...formDetails, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setFormDetails({ ...formDetails, [id]: value });
   };
 
+  const validateForm = () => {
+    if (!formDetails.name || formDetails.name.length < 3 || formDetails.name.length > 255) {
+      toast.error("Name should be between 3 and 255 characters");
+      return false;
+    }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formDetails.email || !emailRegex.test(formDetails.email)) {
+      toast.error("Enter a valid email address");
+      return false;
+    }
+
+    if (!formDetails.password || formDetails.password.length < 6) {
+      toast.error("Password should be at least 6 characters long");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    axios
+      .post('http://localhost:3010/register', formDetails)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          Swal.fire({
+            title: 'Success',
+            text: 'Account successfully Created',
+            icon: 'success',
+          });
+          navigate('/auth/signin'); // Use navigate here
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.message,
+        });
+      });
+
+    setFormDetails({ name: '', email: '', password: ''});
+  };
 
   return (
     <section className="flex w-full h-screen">
@@ -42,6 +97,7 @@ const SignUp = () => {
         {/* Sign up form */}
         <form
           className="flex flex-col gap-4"
+          onSubmit={handleSubmit}
         >
           <Input
             type={"text"}
@@ -51,10 +107,6 @@ const SignUp = () => {
             value={formDetails.name}
             label={"Full Name"}
             placeholder={"John Doe"}
-            errorMessage={
-              "Name should be more than 3 characters long and should not include special characters!"
-            }
-            pattern={"^[a-zA-Z]{3,}(?: [a-zA-Z]{3,})*$"}
           />
           <Input
             type={"email"}
@@ -64,8 +116,6 @@ const SignUp = () => {
             value={formDetails.email}
             label={"Email"}
             placeholder={"example@abc.com"}
-            errorMessage={"Enter a valid email address!"}
-            pattern={/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/}
           />
           <Input
             type={"password"}
@@ -75,15 +125,15 @@ const SignUp = () => {
             value={formDetails.password}
             label={"Password"}
             placeholder={"At least 6 characters long"}
-            errorMessage={
-              "Password should be 6-15 characters long and must include at least 1 letter, 1 number and 1 special character!"
-            }
-            pattern={`^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$`}
           />
           <Button
             content={"Sign in"}
             type={"submit"}
             customCss={"mt-3 rounded-lg"}
+          />
+          <Toaster
+            position="bottom-right"
+            reverseOrder={false}
           />
         </form>
       </div>
