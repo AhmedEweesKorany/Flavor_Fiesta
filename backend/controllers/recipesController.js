@@ -1,5 +1,5 @@
 const Recipes = require("../models/Recips");
-
+// get all recipes
 const getAllRecipes = (req, res) => {
   Recipes.getAll((err, data) => {
     if (err) {
@@ -10,6 +10,7 @@ const getAllRecipes = (req, res) => {
   });
 };
 
+//adding new recipes
 const addNewRecipe = (req, res) => {
   const userdata = req.body;
   Recipes.create(userdata, (err, data) => {
@@ -25,6 +26,7 @@ const addNewRecipe = (req, res) => {
   });
 };
 
+//get only one recipe by id
 const getOneRecipe = (req, res) => {
   const { id } = req.params;
   Recipes.getOneRecipe(id, (err, data) => {
@@ -44,8 +46,29 @@ const getOneRecipe = (req, res) => {
   });
 };
 
+// get last 10 recipes in database to show it in home page carousel
+
+const getLimitedRecipes = (req,res)=>{
+  Recipes.getLimitedRecipes((err,data)=>{
+    if (err) {
+      res
+        .status(400)
+        .json({
+          message: "error happend while getting a limited 10 recipes",
+          err: err,
+        });
+    } else {
+      res.status(200).json({
+        message: " successfull",
+        data:data
+      });
+    }
+  })
+}
+
 module.exports = {
   getAllRecipes,
   addNewRecipe,
   getOneRecipe,
+  getLimitedRecipes
 };

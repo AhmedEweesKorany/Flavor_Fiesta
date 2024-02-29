@@ -48,6 +48,15 @@ const Recipes = {
       }
     );
   },
+  getLimitedRecipes: (callback) => {
+    db.query(
+      "SELECT * FROM `recipes` ORDER BY recipes_id DESC LIMIT 8",
+      (err, data) => {
+        if (err) return callback(err, null);
+        return callback(null, data);
+      }
+    );
+  },
 };
 
 module.exports = Recipes;

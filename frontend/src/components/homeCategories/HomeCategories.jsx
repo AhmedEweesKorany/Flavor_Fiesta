@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -11,8 +11,23 @@ import "./style.css";
 import SwiperCore from "swiper";
 // import required modules
 import { Autoplay, EffectCoverflow, Pagination } from "swiper/modules";
+import { RateReview } from "@mui/icons-material";
+import { Rating } from "@mui/material";
+import { Link } from "react-router-dom";
 SwiperCore.use([Autoplay]);
 export default function HomeCategories() {
+  const [data, setData] = useState([]);
+
+  async function getData() {
+    await fetch("http://localhost:3010/limitedRecipes")
+      .then((res) => res.json())
+      .then((res) => setData(res.data));
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log(data);
   return (
     <>
       <Swiper
@@ -33,33 +48,22 @@ export default function HomeCategories() {
         modules={[EffectCoverflow, Pagination]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/699953/pexels-photo-699953.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/262959/pexels-photo-262959.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/718742/pexels-photo-718742.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/588776/pexels-photo-588776.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/1438672/pexels-photo-1438672.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://images.pexels.com/photos/958546/pexels-photo-958546.jpeg?auto=compress&cs=tinysrgb&w=400" />
-        </SwiperSlide>
+        {data.map((w) => {
+          return (
+            <>
+              <SwiperSlide key={w.recipes_id}>
+                <Link to={`/recipe/${w.recipes_id}`}>
+                <img src={w.recipes_image} />
+                </Link>
+                <p className="slider-p">{w.recipes_title}</p>
+              <div className="rating">
+              <span className="slider-span">{w.recipes_rate}</span>
+                <Rating readOnly value={+w.recipes_rate} className="imgrate" />
+              </div>
+              </SwiperSlide>
+            </>
+          );
+        })}
       </Swiper>
     </>
   );

@@ -22,13 +22,23 @@ import { MoreVert } from "@mui/icons-material";
 const SingleRecipe = () => {
   let { id } = useParams();
   id = +id;
-  console.log(id);
+
   const [data, setData] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+  const [instruction, setInstruction] = useState([]);
+
+  //get single recipe by fetch
   async function getData() {
     fetch(`http://localhost:3010/recipe/${id}`)
       .then((data) => data.json())
       .then((res) => {
         setData(res.data[0]);
+
+        //sperate ingredients into state
+        const ing = res.data[0].recipes_ingredients.split(",");
+        const instr = res.data[0].recipes_cookingInstructions.split(",");
+        setIngredients(ing);
+        setInstruction(instr);
       });
   }
 
@@ -36,8 +46,7 @@ const SingleRecipe = () => {
     getData();
   }, []);
 
-  console.log(JSON.stringify(data.recipes_ingredients));
-
+  console.log(instruction);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -65,7 +74,7 @@ const SingleRecipe = () => {
         <div className="flex flex-col md:flex-row gap-12 items-center">
           {/* Recipe image */}
           <div className="basis-1/3">
-            <img className="rounded w-full" />
+            <img className="rounded w-full" src={data.recipes_image} />
           </div>
           {/* Recipe details */}
           <div className="basis-2/3 flex flex-col gap-2">
@@ -124,6 +133,12 @@ const SingleRecipe = () => {
               </div>
             </div>
             {/* Recipe rating */}
+            <Rating
+              size={"large"}
+              readOnly
+              value={+data.recipes_rate}
+              precision={0.25}
+            />
 
             <p className="my-4">{data.recipes_description}sdsfdsf</p>
             {/* Recipe time & cals */}
@@ -147,16 +162,16 @@ const SingleRecipe = () => {
           <div className="basis-1/3 flex flex-col gap-4 border-b-2 md:border-b-0 pb-4 md:pb-0 md:border-r-2 border-gray-200 items-center">
             <h3 className="font-bold text-2xl">Ingredients</h3>
             <ol className="flex flex-col gap-2 list-decimal ml-5">
-              {/* {data.map((ingredient, i) => (
+              {ingredients.map((ingredient, i) => (
                 <li key={`ingredient-${i + 1}`}>{ingredient}</li>
-              ))} */}
+              ))}
             </ol>
           </div>
           {/* Recipe Instructions */}
           <div className="basis-2/3 flex flex-col gap-4">
             <h3 className="font-bold text-2xl">Instructions</h3>
             <ul className="ml-2 flex flex-col gap-4">
-              {data?.recipes_instructions?.map((instruction, i) => (
+              {instruction.map((instruction, i) => (
                 <li key={`instruction-${i + 1}`}>
                   <h4 className="font-bold text-xl">Step {i + 1}</h4>
                   <p className="ml-2">{instruction}</p>

@@ -18,6 +18,7 @@ router.delete("/deleteuser/:id", userController.deleteUser);
 
 router.get("/recipes", recipesController.getAllRecipes);
 router.get("/recipe/:id", recipesController.getOneRecipe);
+router.get("/limitedRecipes", recipesController.getLimitedRecipes);
 router.post("/addrecipe", recipesController.addNewRecipe);
 
 // Login and Register Operations (errorr ely mbwz eldenyaaaaaaaaaaaaaaaaaa)
