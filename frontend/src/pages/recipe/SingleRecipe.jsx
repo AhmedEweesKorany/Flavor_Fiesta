@@ -18,7 +18,6 @@ import { Link, useParams } from "react-router-dom";
 import { Rating, IconButton, Menu, MenuItem } from "@mui/material";
 
 import { MoreVert } from "@mui/icons-material";
-import BasicModal from "./Modal";
 
 const SingleRecipe = () => {
   let { id } = useParams();
@@ -144,9 +143,7 @@ const SingleRecipe = () => {
 
             <p className="my-4">
               {data.recipes_description}
-              <div className="my-4">
-                <BasicModal data={data.recipes_cookingInstructions} />
-              </div>
+            
             </p>
             {/* Recipe time & cals */}
             <div className="flex flex-col sm:flex-row gap-4 justify-between w-2/3 mx-auto">
