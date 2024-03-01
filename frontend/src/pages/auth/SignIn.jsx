@@ -64,7 +64,7 @@ const SignIn = () => {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: err.message,
+          text: "Check your network connection",
         });
       });
 
@@ -72,7 +72,7 @@ const SignIn = () => {
   };
 
   return (
-    <section className="flex w-full h-screen">
+    <section className="flex w-full h-screen relative">
       {/* Sign in form container */}
       <div className="basis-1/4 m-auto flex flex-col">
         <Logo customCss={"mx-auto md:mx-0"} />
@@ -133,7 +133,7 @@ const SignIn = () => {
                 background: '#363636',
                 color: '#fff',
               },
-
+              
               // Default options for specific types
               success: {
                 duration: 3000,
@@ -146,8 +146,18 @@ const SignIn = () => {
           />
         </form>
       </div>
-      {/* Sign in banner image */}
-      <div className="hidden md:block basis-1/2 bg-login bg-no-repeat bg-cover bg-center"></div>
+      {/* Sign in svg bg */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1440 320"
+        style={{ position: "absolute", top: "0", zIndex: "-1" }}
+      >
+        <path
+          fill="#ffd700"
+          fillOpacity="1"
+          d="M0,320L48,288C96,256,192,192,288,154.7C384,117,480,107,576,90.7C672,75,768,53,864,64C960,75,1056,117,1152,144C1248,171,1344,181,1392,186.7L1440,192L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+        />
+      </svg>
     </section>
   );
 };
