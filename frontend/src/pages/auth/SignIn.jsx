@@ -6,6 +6,7 @@ import axios from "axios"
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import Footer from '../../components/footer/Footer'
 
 const SignIn = () => {
   const navigate = useNavigate(); // Move useNavigate outside of handleSubmit
@@ -72,6 +73,7 @@ const SignIn = () => {
   };
 
   return (
+    <>
     <section className="flex w-full h-screen relative">
       {/* Sign in form container */}
       <div className="basis-1/4 m-auto flex flex-col">
@@ -159,6 +161,8 @@ const SignIn = () => {
         />
       </svg>
     </section>
+      <Footer />
+      </>
   );
 };
 
