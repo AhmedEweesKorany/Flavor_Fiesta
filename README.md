@@ -1,6 +1,6 @@
 # Flavor Fiesta Web Recipes Developer
 
-Welcome to the Flavor Fiesta Web Recipes Developer – your go-to platform for creating, customizing, and exploring delightful culinary experiences! Crafted by the Flavor Fiesta team, this project is designed to empower home chefs, culinary enthusiasts, and anyone eager to embark on a flavorful journey.
+Welcome to the Flavor Fiesta Web Recipes Developer – your go-to platform for creating, customizing, and exploring delightful culinary experiences! Crafted by the Flavor Fiesta team, this project is designed to empower home chefs, culinary enthusiasts, and anyone eager to embark on a flavorful journey.dd
 
 ## Key Features:
 
