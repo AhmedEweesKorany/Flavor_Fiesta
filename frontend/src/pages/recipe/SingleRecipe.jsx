@@ -18,7 +18,6 @@ import { Link, useParams } from "react-router-dom";
 import { Rating, IconButton, Menu, MenuItem } from "@mui/material";
 
 import { MoreVert } from "@mui/icons-material";
-import Modal from "./Modal";
 import BasicModal from "./Modal";
 
 const SingleRecipe = () => {
@@ -84,7 +83,6 @@ const SingleRecipe = () => {
             <div className="flex justify-between">
               <h2 className="font-bold text-xl md:text-3xl">
                 {data.recipes_title}
-                <progress value={0.3} />
               </h2>
               {data?.author?._id === true && (
                 <>
@@ -146,10 +144,8 @@ const SingleRecipe = () => {
 
             <p className="my-4">
               {data.recipes_description}
-<BasicModal>
-  
-  </BasicModal>              <div className="my-4">
-                
+              <div className="my-4">
+                <BasicModal data={data.recipes_cookingInstructions} />
               </div>
             </p>
             {/* Recipe time & cals */}

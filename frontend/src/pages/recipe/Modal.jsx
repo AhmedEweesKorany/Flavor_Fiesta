@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import {
@@ -9,20 +9,30 @@ import {
   NoData,
   ComponentLoading,
 } from "../../components";
-function BasicModal() {
+function BasicModal({ data }) {
   const [show, setShow] = useState(false);
+  const [ins, setIns] = useState([]);
 
+  const [progress, setProgress] = useState(11);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  useEffect(() => {
+    if (data) {
+      console.log("data is ", data.split(","));
+      setIns(data.split(","));
+    }
+  }, []);
+  
 
+  console.log("prog", progress);
   return (
     <>
       <div onClick={handleShow}>
-      <Button
-                  content={"Start Cooking This Recipe"}
-                  customCss={"max-w-max rounded-full"}
-                  // icon={<FiLogIn />}
-                />
+        <Button
+          content={"Start Cooking This Recipe"}
+          customCss={"max-w-max rounded-full"}
+          // icon={<FiLogIn />}
+        />
       </div>
 
       <Modal
@@ -82,7 +92,7 @@ function BasicModal() {
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-600">
               <div
                 className="bg-orange-500 h-2.5 rounded-full"
-                style={{ width: "85%" }}
+                style={{ width: progress / 100 }}
               ></div>
             </div>
             <div className="flex items-center mt-6 space-x-4 rtl:space-x-reverse">
