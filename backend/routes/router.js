@@ -2,6 +2,7 @@ const express = require("express");
 const userController = require("../controllers/userController");
 
 const recipesController = require("../controllers/recipesController");
+const blogsController = require("../controllers/blogController")
 
 const register = require("../Register");
 const login = require("../Login");
