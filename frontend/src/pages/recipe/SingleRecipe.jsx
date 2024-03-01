@@ -18,6 +18,8 @@ import { Link, useParams } from "react-router-dom";
 import { Rating, IconButton, Menu, MenuItem } from "@mui/material";
 
 import { MoreVert } from "@mui/icons-material";
+import Modal from "./Modal";
+import BasicModal from "./Modal";
 
 const SingleRecipe = () => {
   let { id } = useParams();
@@ -47,6 +49,7 @@ const SingleRecipe = () => {
   }, []);
 
   console.log(instruction);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -81,6 +84,7 @@ const SingleRecipe = () => {
             <div className="flex justify-between">
               <h2 className="font-bold text-xl md:text-3xl">
                 {data.recipes_title}
+                <progress value={0.3} />
               </h2>
               {data?.author?._id === true && (
                 <>
@@ -140,7 +144,14 @@ const SingleRecipe = () => {
               precision={0.25}
             />
 
-            <p className="my-4">{data.recipes_description}sdsfdsf</p>
+            <p className="my-4">
+              {data.recipes_description}
+<BasicModal>
+  
+  </BasicModal>              <div className="my-4">
+                
+              </div>
+            </p>
             {/* Recipe time & cals */}
             <div className="flex flex-col sm:flex-row gap-4 justify-between w-2/3 mx-auto">
               <div className="flex flex-col gap-1 items-center">
