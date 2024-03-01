@@ -3,7 +3,6 @@ const userController = require("../controllers/userController");
 
 const recipesController = require("../controllers/recipesController");
 
-const blogsController = require("../controllers/blogController")
 const register = require("../Register");
 const login = require("../Login");
 
@@ -28,6 +27,13 @@ router.get("/blogs", blogsController.getBlogs);
 router.get("/blog/:id", blogsController.getBlog);
 // Login and Register Operations (errorr ely mbwz eldenyaaaaaaaaaaaaaaaaaa)
 router.post("/register", register);
-router.post("/login", login);
+router.post("/login", login.Login);
+router.get("/logout", (req, res) =>{
+    res.clearCookie("userToken")
+})
+
+router.get('/home', login.verifyToken, (req, res) => {
+    res.json({message: "success"});
+})
 
 module.exports = router;
