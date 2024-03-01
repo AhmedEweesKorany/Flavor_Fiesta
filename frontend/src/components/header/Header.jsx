@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Logo, Button, Menu,  } from "..";
+import { Logo, Button, Menu } from "..";
 import { Link, NavLink } from "react-router-dom";
 import { FiLogIn, FiMenu } from "react-icons/fi";
 
@@ -22,15 +22,15 @@ const Header = () => {
                 Home
               </NavLink>
             </li>
-              <li>
-                <NavLink
-                  to={"/dashboard/users"}
-                  className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
-                >
-                  Dashboard
-                </NavLink>
-              </li>
-            
+            <li>
+              <NavLink
+                to={"/dashboard"}
+                className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
+              >
+                Dashboard
+              </NavLink>
+            </li>
+
             <li>
               <NavLink
                 to={"/recipe"}
@@ -58,18 +58,15 @@ const Header = () => {
           </ul>
         </nav>
         {/* Sign in button */}
-    
-          <Link
-            to={"/auth/signin"}
-            className="hidden md:block"
-          >
-            <Button
-              content={"Sign In"}
-              customCss={"max-w-max rounded-full"}
-              icon={<FiLogIn />}
-            />
-          </Link>
-        
+
+        <Link to={"/auth/signin"} className="hidden md:block">
+          <Button
+            content={"Sign In"}
+            customCss={"max-w-max rounded-full"}
+            icon={<FiLogIn />}
+          />
+        </Link>
+
         {/* Menu button */}
         <FiMenu
           className="block md:hidden text-xl cursor-pointer"
@@ -77,10 +74,7 @@ const Header = () => {
         />
 
         {/* Mobile navbar */}
-        <Menu
-          setIsCollapsed={setIsCollapsed}
-          isCollapsed={isCollapsed}
-        />
+        <Menu setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
       </div>
     </header>
   );

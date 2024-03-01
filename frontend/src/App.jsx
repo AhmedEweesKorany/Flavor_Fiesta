@@ -30,7 +30,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-
   return (
     <Router>
       <ScrollToTop />
@@ -43,128 +42,45 @@ function App() {
       <Suspense fallback={<PageLoading />}>
         <Routes>
           <Route path="/auth">
-            <Route
-              path="signin"
-              element={<SignIn />}
-            />
-            <Route
-              path="signup"
-              element={<SignUp />}
-            />
+            <Route path="signin" element={<SignIn />} />
+            <Route path="signup" element={<SignUp />} />
           </Route>
 
-          <Route >
-            {/* Dashboard */}
-            <Route >
-              <Route
-                path="/dashboard"
-                element={<DashboardLayout />}
-              >
-                <Route
-                  path="users"
-                  element={<Users />}
-                />
-                <Route
-                  path="recipes"
-                  element={<DashboardRecipes />}
-                />
-                <Route
-                  path="blogs"
-                  element={<DashboardBlogs />}
-                />
+          {/* Dashboard */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="users" element={<Users />} />
+            <Route path="recipes" element={<DashboardRecipes />} />
+            <Route path="blogs" element={<DashboardBlogs />} />
+          </Route>
+
+          <Route element={<RootLayout />}>
+            <Route index element={<Home />} />
+            <Route path="recipe">
+              <Route index element={<Recipe />} />
+              <Route path=":id" element={<SingleRecipe />} />
+              <Route path="saved" element={<SavedRecipes />} />
+              <Route>
+                <Route path="add" element={<AddRecipe />} />
+                <Route path="my-recipes" element={<MyRecipes />} />
+                <Route path="edit/:id" element={<EditRecipe />} />
               </Route>
             </Route>
-
-            <Route
-              path="/"
-              element={<RootLayout />}
-            >
-              <Route
-                index
-                element={<Home />}
-              />
-              <Route path="recipe">
-                <Route
-                  index
-                  element={<Recipe />}
-                />
-                <Route
-                  path=":id"
-                  element={<SingleRecipe />}
-                />
-                <Route
-                  path="saved"
-                  element={<SavedRecipes />}
-                />
-
-                <Route
-                 
-                >
-                  <Route
-                    path="add"
-                    element={<AddRecipe />}
-                  />
-                  <Route
-                    path="my-recipes"
-                    element={<MyRecipes />}
-                  />
-                  <Route
-                    path="edit/:id"
-                    element={<EditRecipe />}
-                  />
-                </Route>
+            <Route path="contact" element={<Contact />} />
+            <Route path="blog">
+              <Route index element={<Blogs />} />
+              <Route path=":id" element={<SingleBlog />} />
+              <Route>
+                <Route path="add" element={<AddBlog />} />
+                <Route path="my-blogs" element={<MyBlogs />} />
+                <Route path="edit/:id" element={<EditBlog />} />
               </Route>
-              <Route
-                path="contact"
-                element={<Contact />}
-              />
-              <Route path="blog">
-                <Route
-                  index
-                  element={<Blogs />}
-                />
-                <Route
-                  path=":id"
-                  element={<SingleBlog />}
-                />
-                <Route
-                
-                >
-                  <Route
-                    path="add"
-                    element={<AddBlog />}
-                  />
-                  <Route
-                    path="my-blogs"
-                    element={<MyBlogs />}
-                  />
-                  <Route
-                    path="edit/:id"
-                    element={<EditBlog />}
-                  />
-                </Route>
-              </Route>
-              <Route
-              
-              >
-                <Route
-                  path="profile"
-                  element={<Profile />}
-                />
-                <Route
-                  path="payment-success"
-                  element={<CheckoutSuccess />}
-                />
-                <Route
-                  path="payment-failed"
-                  element={<CheckoutFailure />}
-                />
-              </Route>
-              <Route
-                path="/*"
-                element={<Error />}
-              />
             </Route>
+            <Route>
+              <Route path="profile" element={<Profile />} />
+              <Route path="payment-success" element={<CheckoutSuccess />} />
+              <Route path="payment-failed" element={<CheckoutFailure />} />
+            </Route>
+            <Route path="/*" element={<Error />} />
           </Route>
         </Routes>
       </Suspense>
