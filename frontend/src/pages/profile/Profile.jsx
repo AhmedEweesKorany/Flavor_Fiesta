@@ -3,25 +3,38 @@ import { Button, Input } from "../../components";
 import { BiLockAlt } from "react-icons/bi";
 import { IoMailOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
-import axios from 'axios'
-import toast, { Toaster } from 'react-hot-toast';
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Profile = () => {
-  const userId = localStorage.getItem('id')
-  const [userName, setUserName] = useState([])
-  const [userEmail, setUserEmail] = useState([])
-  if(userName != undefined){
-    console.log(userName);
-  }
-  if(userEmail != undefined){
-    console.log(userEmail);
-  }
-
+  const userId = localStorage.getItem("id");
   const [formDetails, setFormDetails] = useState({
     name: "",
     email: "",
     password: "",
   });
+
+
+  const getUser = () => {
+    axios
+      .get(`http://localhost:3010/getSingle/${userId}`)
+      .then((res) => {
+        console.log(res.data.result[0].username);
+        setFormDetails({
+          name:res.data.result[0].username,
+          email:res.data.result[0].email,
+          password:res.data.result[0].password
+        })
+       
+      })
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  
+
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -29,7 +42,11 @@ const Profile = () => {
   };
 
   const validateForm = () => {
-    if (!formDetails.name || formDetails.name.length < 3 || formDetails.name.length > 255) {
+    if (
+      !formDetails.name ||
+      formDetails.name.length < 3 ||
+      formDetails.name.length > 255
+    ) {
       toast.error("Name should be between 3 and 255 characters");
       return false;
     }
@@ -57,25 +74,17 @@ const Profile = () => {
 
     // form submission logic
     axios
-    .post(`http://localhost:3010/updateuser/${localStorage.getItem('id')}`, formDetails)
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {console.log(err);})
+      .post(
+        `http://localhost:3010/updateuser/${localStorage.getItem("id")}`,
+        formDetails
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
-  const getUser = () => {
-    axios.get(`http://localhost:3010/getSingle/${userId}`)
-    .then(res => {
-      console.log(res.data.result)
-      setUserName(res.data.result.username)
-      setUserEmail(res.data.result.email)
-    })
-    .catch(err => console.log(err))
-  } 
-  useEffect(() => {
-    getUser()
-  }, [])
 
   return (
     <section className="box md:max-w-5xl flex flex-col gap-12">
@@ -95,7 +104,7 @@ const Profile = () => {
             id={"name"}
             icon={<AiOutlineUser />}
             handleChange={handleChange}
-            value={userName}
+            value={formDetails.name}
             label={"Full Name"}
             placeholder={""}
           />
@@ -104,9 +113,8 @@ const Profile = () => {
             id={"email"}
             icon={<IoMailOutline />}
             handleChange={handleChange}
-            value={userEmail}
+            value={formDetails.email}
             label={"Email"}
-            
           />
           <Input
             type={"password"}
@@ -130,19 +138,19 @@ const Profile = () => {
             containerStyle={{}}
             toastOptions={{
               // Define default options
-              className: '',
+              className: "",
               duration: 5000,
               style: {
-                background: '#363636',
-                color: '#fff',
+                background: "#363636",
+                color: "#fff",
               },
-              
+
               // Default options for specific types
               success: {
                 duration: 3000,
                 theme: {
-                  primary: 'green',
-                  secondary: 'black',
+                  primary: "green",
+                  secondary: "black",
                 },
               },
             }}
