@@ -24,6 +24,17 @@ const createUser = (req,res)=>{
   })
 }
 
+const getSingle = (req, res) => {
+    const id = req.params.id;
+    User.getSingle(id, (err, result) => {
+        if(err){
+            res.status(400).json({message:"error in get single user"})
+        }else{
+            res.status(200).json({result: result})
+        }
+    })
+}
+
 
 const updateUser = (req,res)=>{
     const {id} = req.params
@@ -48,4 +59,4 @@ const deleteUser = (req,res)=>{
         }
     })
 }
-module.exports = {getAllUsers,createUser,updateUser,deleteUser}
+module.exports = {getAllUsers,getSingle,createUser,updateUser,deleteUser}

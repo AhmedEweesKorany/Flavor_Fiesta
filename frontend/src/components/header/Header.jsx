@@ -29,7 +29,7 @@ const Header = () => {
         <>
           <Link to={"/auth/signin"} className="hidden md:block">
             <Button
-              content={"singin "}
+              content={"Sign In "}
               customCss={"max-w-max rounded-full"}
               icon={<FiLogIn />}
             />

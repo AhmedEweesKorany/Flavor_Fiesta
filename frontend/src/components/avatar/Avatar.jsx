@@ -94,7 +94,7 @@ const Avatar = ({ username, email }) => {
       >
         <MenuItem>
           <Link to={"/profile"} className="flex items-center">
-            <MuiAvatar /> Hello {username}
+            <MuiAvatar style={{marginRight: "10px"}}/> Hello {username}
           </Link>
         </MenuItem>
 
