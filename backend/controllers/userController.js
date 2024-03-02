@@ -41,7 +41,7 @@ const updateUser = (req,res)=>{
     const data = req.body
     User.update(data,id,(err,result)=>{
         if(err){
-            res.status(400).json({message:"error happend from update"})
+            res.status(400).json({message:"error happend from update",err:err})
         }else{
             res.status(200).json({message:"no errors ya b5tk and user updated successgffully"})
         }

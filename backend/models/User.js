@@ -23,9 +23,9 @@ const User = {
             
         return callback(null,data)
     });
-  }, update: async(userdata,id, callback) => {
+  },  update: async (userdata,id, callback) => {
     const { username, email, password } = userdata;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword =  await bcrypt.hash(password, 10);
     db.query("UPDATE `users` SET `username`=?,`email`=?,`password`=? WHERE id = ?",[username,email,hashedPassword,id],(err,data)=>{
         if(err) return callback(err,null)
         return callback(null,data)
