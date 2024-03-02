@@ -5,36 +5,30 @@ import { IoMailOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Swal from 'sweetalert2';
 
 const Profile = () => {
   const userId = localStorage.getItem("id");
   const [formDetails, setFormDetails] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
-
 
   const getUser = () => {
     axios
       .get(`http://localhost:3010/getSingle/${userId}`)
       .then((res) => {
-        console.log(res.data.result[0].username);
         setFormDetails({
-          name:res.data.result[0].username,
-          email:res.data.result[0].email,
-          password:res.data.result[0].password
-        })
-       
+          username: res.data.result[0].username,
+          email: res.data.result[0].email,
+        });
       })
       .catch((err) => console.log(err));
   };
   useEffect(() => {
     getUser();
   }, []);
-
-  
-
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -43,9 +37,9 @@ const Profile = () => {
 
   const validateForm = () => {
     if (
-      !formDetails.name ||
-      formDetails.name.length < 3 ||
-      formDetails.name.length > 255
+      !formDetails.username ||
+      formDetails.username.length < 3 ||
+      formDetails.username.length > 255
     ) {
       toast.error("Name should be between 3 and 255 characters");
       return false;
@@ -75,14 +69,26 @@ const Profile = () => {
     // form submission logic
     axios
       .post(
-        `http://localhost:3010/updateuser/${localStorage.getItem("id")}`,
+        `http://localhost:3010/updateuser/${userId}`,
         formDetails
       )
       .then((res) => {
         console.log(res);
+        if (res.status === 200) {
+          Swal.fire({
+            title: "Success",
+            text: "Profile successfully Updated",
+            icon: "success",
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error Happened",
+        });
       });
   };
 
@@ -101,12 +107,12 @@ const Profile = () => {
         >
           <Input
             type={"text"}
-            id={"name"}
+            id={"username"}
             icon={<AiOutlineUser />}
             handleChange={handleChange}
-            value={formDetails.name}
+            value={formDetails.username}
             label={"Full Name"}
-            placeholder={""}
+            placeholder={"John Doe"}
           />
           <Input
             type={"email"}
@@ -115,13 +121,13 @@ const Profile = () => {
             handleChange={handleChange}
             value={formDetails.email}
             label={"Email"}
+            placeholder={"example@abc.com"}
           />
           <Input
             type={"password"}
             id={"password"}
             icon={<BiLockAlt />}
             handleChange={handleChange}
-            value={formDetails.password}
             label={"Password"}
             placeholder={"At least 6 characters long"}
           />
