@@ -6,9 +6,11 @@ import { AiOutlineUser } from "react-icons/ai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const userId = localStorage.getItem("id");
+  const navigate = useNavigate()
   const [formDetails, setFormDetails] = useState({
     username: "",
     email: "",
@@ -22,7 +24,6 @@ const Profile = () => {
         setFormDetails({
           username: res.data.result[0].username,
           email: res.data.result[0].email,
-          password: res.data.result[0].password,
         });
       })
       .catch((err) => console.log(err));
@@ -52,10 +53,10 @@ const Profile = () => {
       return false;
     }
 
-    if (!formDetails.password || formDetails.password.length < 6) {
-      toast.error("Password should be at least 6 characters long");
-      return false;
-    }
+    // if (!formDetails.password || formDetails.password.length < 6) {
+    //   toast.error("Password should be at least 6 characters long");
+    //   return false;
+    // }
 
     return true;
   };
@@ -81,6 +82,12 @@ const Profile = () => {
             text: "Profile Updated successfully",
             icon: "success",
           });
+          localStorage.setItem("username", formDetails.username);
+          localStorage.setItem("email", formDetails.email);
+          navigate("/")
+          setTimeout(()=>{
+            window.location.reload()
+          },1000)
         }
       })
       .catch((err) => {
@@ -129,7 +136,6 @@ const Profile = () => {
             id={"password"}
             icon={<BiLockAlt />}
             handleChange={handleChange}
-            value={formDetails.password}
             label={"Password"}
             placeholder={"At least 6 characters long"}
           />
