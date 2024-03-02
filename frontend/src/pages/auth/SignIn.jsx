@@ -72,7 +72,7 @@ const SignIn = () => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Check your network connection",
+          text: "Email or Password incorrect",
         });
       });
 
