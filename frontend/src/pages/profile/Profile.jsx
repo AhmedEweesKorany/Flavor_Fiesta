@@ -7,6 +7,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
+import {profileBg} from '../../assets'
 
 const Profile = () => {
   const userId = localStorage.getItem("id");
@@ -170,6 +171,12 @@ const Profile = () => {
             }}
           />
         </form>
+        <div className="hidden md:block md:basis-1/3">
+          <img
+            src={profileBg}
+            alt="profile page banner"
+          />
+        </div>
       </div>
     </section>
   );
