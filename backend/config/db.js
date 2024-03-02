@@ -1,10 +1,10 @@
 const mysql = require("mysql2");
-
+require("dotenv").config()
 const db_server = mysql.createPool({
-  host: "sql.freedb.tech",
-  user: "freedb_flavourfiestaaaaa",
-  password: "C%CXNht4pX*ZB6?",
-  database: "freedb_flavour",
+  host: process.env.HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   waitForConnections: true,
   connectionLimit: 10, 
   queueLimit: 0, 
