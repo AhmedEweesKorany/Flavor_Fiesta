@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser")
 app.use(bodyParser.json())
 app.use(cors({
     origin: ["http://localhost:5173"],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }))
 app.use(bodyParser.urlencoded({extended:true}))

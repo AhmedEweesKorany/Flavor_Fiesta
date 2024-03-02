@@ -22,6 +22,7 @@ const Profile = () => {
         setFormDetails({
           username: res.data.result[0].username,
           email: res.data.result[0].email,
+          password: res.data.result[0].password,
         });
       })
       .catch((err) => console.log(err));
@@ -68,7 +69,7 @@ const Profile = () => {
 
     // form submission logic
     axios
-      .post(
+      .put(
         `http://localhost:3010/updateuser/${userId}`,
         formDetails
       )
@@ -77,7 +78,7 @@ const Profile = () => {
         if (res.status === 200) {
           Swal.fire({
             title: "Success",
-            text: "Profile successfully Updated",
+            text: "Profile Updated successfully",
             icon: "success",
           });
         }
@@ -128,6 +129,7 @@ const Profile = () => {
             id={"password"}
             icon={<BiLockAlt />}
             handleChange={handleChange}
+            value={formDetails.password}
             label={"Password"}
             placeholder={"At least 6 characters long"}
           />
