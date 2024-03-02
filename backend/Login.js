@@ -21,7 +21,7 @@ const Login = async(req, res) =>{
             console.log({accessToken: accessToken})
             res.cookie("userToken", accessToken, { httpOnly: true, secure: true });
 
-            res.status(200).send({ message: 'Login successful' });
+            res.status(200).send({ message: 'Login successful',data:result });
           } else {
             res.status(401).send({ message: 'Email or password is incorrect' });
           }

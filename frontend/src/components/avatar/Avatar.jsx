@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar as MuiAvatar,
   Divider,
@@ -19,7 +19,7 @@ import {
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 
-const Avatar = () => {
+const Avatar = ({ username, email }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
@@ -35,9 +35,14 @@ const Avatar = () => {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    localStorage.setItem("persist", false);
-    navigate("/auth/signin");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
+    localStorage.removeItem("id");
+
+    window.location.reload()
   };
+  // delete user info when log out
 
   return (
     <div className="ml-auto md:ml-0">
@@ -50,9 +55,7 @@ const Avatar = () => {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
         >
-          <MuiAvatar
-     
-          />
+          <MuiAvatar />
         </IconButton>
       </Tooltip>
       <Menu
@@ -91,7 +94,7 @@ const Avatar = () => {
       >
         <MenuItem>
           <Link to={"/profile"} className="flex items-center">
-            <MuiAvatar /> Profile
+            <MuiAvatar /> Hello {username}
           </Link>
         </MenuItem>
 

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { Sidebar } from "../components";
 import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
 
+  const [isCollapsed, setIsCollapsed] = useState(true);
   return (
     <section className="flex">
       <Sidebar

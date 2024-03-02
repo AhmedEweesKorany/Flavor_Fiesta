@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, createContext, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   AddBlog,
@@ -29,9 +29,14 @@ import { RootLayout, DashboardLayout } from "./layouts";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+export const MyContext = createContext();
+
 function App() {
+   const [userdata,setUserData] = useState([])
+
   return (
-    <Router>
+  <MyContext.Provider value={{userdata,setUserData}}>
+<Router>
       <ScrollToTop />
       <ToastContainer
         autoClose={5000}
@@ -47,7 +52,7 @@ function App() {
           </Route>
 
           {/* Dashboard */}
-          <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route path="/dashboard" element={localStorage.getItem("role")=="admin"?<DashboardLayout />:<Error/>}>
             <Route path="users" element={<Users />} />
             <Route path="recipes" element={<DashboardRecipes />} />
             <Route path="blogs" element={<DashboardBlogs />} />
@@ -76,7 +81,7 @@ function App() {
               </Route>
             </Route>
             <Route>
-              <Route path="profile" element={<Profile />} />
+              <Route path="profile" element={localStorage.getItem("id")?<Profile />:<Error/>} />
               <Route path="payment-success" element={<CheckoutSuccess />} />
               <Route path="payment-failed" element={<CheckoutFailure />} />
             </Route>
@@ -85,6 +90,7 @@ function App() {
         </Routes>
       </Suspense>
     </Router>
+  </MyContext.Provider>
   );
 }
 
