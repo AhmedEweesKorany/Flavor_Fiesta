@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { GiKnifeFork } from "react-icons/gi";
-import { Button } from "..";
+import { Button } from "../";
 import { Link } from "react-router-dom";
 import { TypeAnimation } from 'react-type-animation';
 //images 
@@ -63,7 +63,7 @@ const Hero = () => {
         </Link>
       </div>
       <div className="basis-1/2 bg-no-repeat bg-cover bg-center rounded-xl"
-      style={{ backgroundImage: url(`${imagesanim[currentImageIndex]}`) }} >
+      style={{ backgroundImage: `url(${imagesanim[currentImageIndex]}) `}} >
         
       </div>
     </section>
