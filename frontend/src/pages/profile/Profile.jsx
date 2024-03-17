@@ -20,7 +20,7 @@ const Profile = () => {
   const [confirm,setConfirm] = useState("")
   const getUser = () => {
     axios
-      .get(http://localhost:3010/getSingle/${userId})
+      .get(`http://localhost:3010/getSingle/${userId}`)
       .then((res) => {
         setFormDetails({
           username: res.data.result[0].username,
@@ -77,7 +77,7 @@ const Profile = () => {
     // form submission logic
     axios
       .put(
-        http://localhost:3010/updateuser/${userId},
+       ` http://localhost:3010/updateuser/${userId}`,
         formDetails
       )
       .then((res) => {
