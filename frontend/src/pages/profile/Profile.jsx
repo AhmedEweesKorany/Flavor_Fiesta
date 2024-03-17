@@ -17,10 +17,10 @@ const Profile = () => {
     email: "",
     password: "",
   });
-
+  const [confirm,setConfirm] = useState("")
   const getUser = () => {
     axios
-      .get(`http://localhost:3010/getSingle/${userId}`)
+      .get(http://localhost:3010/getSingle/${userId})
       .then((res) => {
         setFormDetails({
           username: res.data.result[0].username,
@@ -68,11 +68,16 @@ const Profile = () => {
     if (!validateForm()) {
       return;
     }
-
+    if(formDetails.password != confirm ){
+   if(formDetails.password != "" && confirm != ""){
+    toast.error("Password doesn't match");
+    return;
+   }
+    }
     // form submission logic
     axios
       .put(
-        `http://localhost:3010/updateuser/${userId}`,
+        http://localhost:3010/updateuser/${userId},
         formDetails
       )
       .then((res) => {
@@ -140,6 +145,16 @@ const Profile = () => {
             label={"Password"}
             placeholder={"At least 6 characters long"}
           />
+
+<Input
+            type={"password"}
+            id={"confirmpassword"}
+            icon={<BiLockAlt />}
+            handleChange={(e)=> setConfirm(e.target.value)}
+            label={"Confirm Password"}
+            placeholder={"Confirm Password"}
+          />
+
           <Button
             type="submit"
             content={"Save changes"}
