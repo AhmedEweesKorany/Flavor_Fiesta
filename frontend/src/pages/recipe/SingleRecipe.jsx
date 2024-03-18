@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  Comment,
-  Button,
-  Input,
-  ShareButton,
-  NoData,
-  ComponentLoading,
-} from "../../components";
+import { Comment, Button, Input, ShareButton, NoData } from "../../components";
 import { IoMailOutline } from "react-icons/io5";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { LuChefHat } from "react-icons/lu";
 import { BsStopwatch } from "react-icons/bs";
 import { LiaWeightSolid } from "react-icons/lia";
-import { AiOutlineHeart, AiFillHeart, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineUser } from "react-icons/ai";
 
 import { Link, useParams } from "react-router-dom";
 import { Rating, IconButton, Menu, MenuItem } from "@mui/material";
 
 import { MoreVert } from "@mui/icons-material";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const SingleRecipe = () => {
   let { id } = useParams();
@@ -26,7 +21,7 @@ const SingleRecipe = () => {
   const [data, setData] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [instruction, setInstruction] = useState([]);
-
+  const [comments, setComments] = useState([]);
   //get single recipe by fetch
   async function getData() {
     fetch(`http://localhost:3010/recipe/${id}`)
@@ -42,18 +37,13 @@ const SingleRecipe = () => {
       });
   }
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  console.log(instruction);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
   const [formDetails, setFormDetails] = useState({
-    name: "",
-    email: "",
+    name: localStorage.getItem("username"),
+    email: localStorage.getItem("email"),
     message: "",
   });
 
@@ -69,6 +59,39 @@ const SingleRecipe = () => {
     setAnchorEl(null);
   };
 
+  // handle comment submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formDetails.message) {
+      Swal.fire("please write a comment", "", "error");
+    } else {
+      axios
+        .post("http://localhost:3010/addcomment", {
+          userID: localStorage.getItem("id"),
+          message: formDetails.message,
+          recipeID: id,
+          blogID: null,
+          username: localStorage.getItem("username"),
+        })
+        .then((data) => {
+          Swal.fire("comment added", "", "success");
+          axios
+          .get(`http://localhost:3010/getcomments/${id}`)
+          .then((data) => setComments(data.data.data));
+        })
+        .catch((e) => {
+          console.log(e);
+          Swal.fire("err", "", "error");
+        });
+    }
+  };
+
+  useEffect(() => {
+    getData();
+    axios
+      .get(`http://localhost:3010/getcomments/${id}`)
+      .then((data) => setComments(data.data.data));
+  }, []);
   return (
     <>
       <section className="box flex flex-col gap-8">
@@ -141,10 +164,7 @@ const SingleRecipe = () => {
               precision={0.25}
             />
 
-            <p className="my-4">
-              {data.recipes_description}
-            
-            </p>
+            <p className="my-4">{data.recipes_description}</p>
             {/* Recipe time & cals */}
             <div className="flex flex-col sm:flex-row gap-4 justify-between w-2/3 mx-auto">
               <div className="flex flex-col gap-1 items-center">
@@ -197,7 +217,7 @@ const SingleRecipe = () => {
         {/* Recipe comment form */}
         <div className="my-10 w-full sm:w-2/3 md:w-1/2 mx-auto flex flex-col gap-6">
           <h3 className="font-bold text-2xl">Leave a Reply</h3>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <Input
               type={"text"}
               id={"name"}
@@ -225,7 +245,6 @@ const SingleRecipe = () => {
                 value={formDetails.message}
                 id="message"
                 rows={4}
-                required
                 aria-required="true"
                 placeholder="Leave a comment..."
                 className="py-2 px-4 border bg-gray-100 rounded-lg focus:outline outline-primary"
@@ -243,10 +262,10 @@ const SingleRecipe = () => {
         {/* Recipe comments */}
         <div className="w-full sm:w-4/5 mx-auto flex flex-col gap-6">
           <h3 className="font-bold text-2xl">Comments</h3>
-          {data?.comments?.length ? (
+          {comments.length ? (
             <div className="flex flex-col gap-6">
-              {data?.comments?.map((comment) => (
-                <Comment key={comment?._id} comment={comment} />
+              {comments?.map((comment) => (
+                <Comment key={comment?._id} username={comment.username} comment_content={comment.comment_content} />
               ))}
             </div>
           ) : (

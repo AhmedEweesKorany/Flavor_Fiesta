@@ -18,6 +18,8 @@ import dateFormat from "../../common/dateFormat";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const SingleBlog = () => {
   const { id } = useParams();
@@ -25,6 +27,7 @@ const SingleBlog = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const [comments, setComments] = useState([]);
 
   async function getData() {
     await fetch(`http://localhost:3010/blog/${id}`)
@@ -36,13 +39,9 @@ const SingleBlog = () => {
       });
   }
 
-  useEffect(() => {
-    getData();
-  }, []);
-
   const [formDetails, setFormDetails] = useState({
-    name: "",
-    email: "",
+    name: localStorage.getItem("username"),
+    email: localStorage.getItem("email"),
     message: "",
   });
 
@@ -64,7 +63,39 @@ const SingleBlog = () => {
     }
     setAnchorEl(null);
   };
+  // handle comment submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formDetails.message) {
+      Swal.fire("please write a comment", "", "error");
+    } else {
+      axios
+        .post("http://localhost:3010/addcomment", {
+          userID: localStorage.getItem("id"),
+          message: formDetails.message,
+          recipeID: null,
+          blogID: id,
+          username: localStorage.getItem("username"),
+        })
+        .then((data) => {
+          Swal.fire("comment added", "", "success");
+          axios
+            .get(`http://localhost:3010/getcommentsbyblog/${id}`)
+            .then((data) => setComments(data.data.data));
+        })
+        .catch((e) => {
+          console.log(e);
+          Swal.fire("err", "", "error");
+        });
+    }
+  };
 
+  useEffect(() => {
+    getData();
+    axios
+      .get(`http://localhost:3010/getcommentsbyblog/${id}`)
+      .then((data) => setComments(data.data.data));
+  }, []);
   return (
     <>
       <section className="box flex flex-col gap-8">
@@ -131,7 +162,7 @@ const SingleBlog = () => {
         {/* Blog comment form */}
         <div className="my-6 w-full sm:w-2/3 md:w-1/2 mx-auto flex flex-col gap-6">
           <h3 className="font-bold text-2xl">Leave a Reply</h3>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <Input
               type={"text"}
               id={"name"}
@@ -177,10 +208,14 @@ const SingleBlog = () => {
         {/* Blog comments */}
         <div className="w-full sm:w-4/5 mx-auto flex flex-col gap-6">
           <h3 className="font-bold text-2xl">Comments</h3>
-          {data?.comments?.length ? (
+          {comments.length ? (
             <div className="flex flex-col gap-6">
-              {data?.comments?.map((comment) => (
-                <Comment key={comment?._id} comment={comment} />
+              {comments?.map((comment) => (
+                <Comment
+                  key={comment?._id}
+                  username={comment.username}
+                  comment_content={comment.comment_content}
+                />
               ))}
             </div>
           ) : (
